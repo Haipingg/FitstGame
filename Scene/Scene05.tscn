@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://cgcc5p26lg70n"]
+
+[ext_resource type="Texture2D" uid="uid://cdvkapji43twj" path="res://Sheet/1 (88)/12.png" id="1_as4j3"]
+[ext_resource type="Texture2D" uid="uid://cn8l0noh6twae" path="res://icon.svg" id="2_jrq1p"]
+
+[node name="Scene05" type="Control" unique_id=2079995160]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1143086237]
+layout_mode = 1
+offset_right = 300.0
+offset_bottom = 200.0
+texture = ExtResource("1_as4j3")
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=11366041]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_bottom = 200.0
+grow_horizontal = 0
+texture = ExtResource("1_as4j3")
+
+[node name="TextureRect3" type="TextureRect" parent="." unique_id=1539420310]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("1_as4j3")
+
+[node name="TextureRect4" type="TextureRect" parent="." unique_id=556418941]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_right = 300.0
+grow_vertical = 0
+texture = ExtResource("1_as4j3")
+
+[node name="Label" type="Label" parent="." unique_id=2041050671]
+layout_mode = 0
+offset_left = 674.0
+offset_top = 255.0
+offset_right = 714.0
+offset_bottom = 278.0
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=1599325540]
+layout_mode = 0
+offset_left = 297.0
+offset_top = 270.0
+offset_right = 337.0
+offset_bottom = 310.0
+texture_normal = ExtResource("2_jrq1p")

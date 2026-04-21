@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://dyajyb00hlici"]
+
+[ext_resource type="Script" uid="uid://c5lctvp38s5si" path="res://Scripts/StaticBody2dLearn.cs" id="1_71x0l"]
+[ext_resource type="Texture2D" uid="uid://cn8l0noh6twae" path="res://icon.svg" id="2_yixrn"]
+[ext_resource type="Script" uid="uid://dw8xclygmdcnv" path="res://Scripts/Area2dLearn.cs" id="3_4mxpn"]
+[ext_resource type="Texture2D" uid="uid://dt6jhws4gpcbp" path="res://Sheet/spritesheet.png" id="4_5mry6"]
+[ext_resource type="Script" uid="uid://sej411eebard" path="res://Scripts/Sprite2d.cs" id="5_yixrn"]
+[ext_resource type="Script" uid="uid://ct2kg55aubfun" path="res://Scripts/CharacterBody2dLearn.cs" id="6_4mxpn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_amtld"]
+size = Vector2(1051, 129)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eiy8l"]
+size = Vector2(107, 90)
+
+[sub_resource type="Animation" id="Animation_yixrn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 187)]
+}
+
+[sub_resource type="Animation" id="Animation_4mxpn"]
+resource_name = "new_animation"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 187), Vector2(800, 187)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5mry6"]
+_data = {
+&"RESET": SubResource("Animation_yixrn"),
+&"new_animation": SubResource("Animation_4mxpn")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yixrn"]
+size = Vector2(128, 123)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4mxpn"]
+size = Vector2(125, 127)
+
+[node name="Scene04" type="Node2D" unique_id=1674125801]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1847111986]
+position = Vector2(298, 505)
+script = ExtResource("1_71x0l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2115125989]
+position = Vector2(275, -2)
+shape = SubResource("RectangleShape2D_amtld")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=525031436]
+position = Vector2(0.425, 0)
+texture = ExtResource("2_yixrn")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2045509762]
+position = Vector2(1, 187)
+script = ExtResource("3_4mxpn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=86016804]
+position = Vector2(79, 194)
+shape = SubResource("RectangleShape2D_eiy8l")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D/CollisionShape2D" unique_id=1255517204]
+position = Vector2(7, -6)
+scale = Vector2(0.585, 0.585)
+texture = ExtResource("4_5mry6")
+hframes = 9
+frame = 8
+script = ExtResource("5_yixrn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2120733215]
+libraries/ = SubResource("AnimationLibrary_5mry6")
+autoplay = &"new_animation"
+
+[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=842210799]
+position = Vector2(261, 115)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=377217861]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_yixrn")
+
+[node name="Sprite2D2" type="Sprite2D" parent="RigidBody2D" unique_id=21635110]
+texture = ExtResource("2_yixrn")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1090045823]
+position = Vector2(654, 168)
+script = ExtResource("6_4mxpn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1981053389]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_4mxpn")
+
+[node name="Sprite2D2" type="Sprite2D" parent="CharacterBody2D" unique_id=1317576757]
+texture = ExtResource("2_yixrn")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="OnBodyEntered"]

@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://g5mebvnltdyf"]
+
+[ext_resource type="Script" uid="uid://bn2sydcpjdj3t" path="res://Scripts/Main.cs" id="1_xhtwi"]
+[ext_resource type="Texture2D" uid="uid://qqjtsoipudva" path="res://Sheet/Gemini_Generated_Image_4c8oq4c8oq4c8oq4.png" id="2_g6ejq"]
+
+[node name="Main" type="Control" unique_id=987354320]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xhtwi")
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=1993659090]
+autoscroll = Vector2(-20, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=457962929]
+texture = ExtResource("2_g6ejq")
+centered = false
+
+[node name="ButtonPlay" type="Button" parent="." unique_id=306188140]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -526.0
+offset_top = -256.0
+offset_right = -401.0
+offset_bottom = -172.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "开始游戏"
+
+[node name="ButtonQuit" type="Button" parent="." unique_id=877674646]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -526.0
+offset_top = -105.0
+offset_right = -401.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "退出游戏"
+
+[connection signal="button_down" from="ButtonPlay" to="." method="OnButtonPlayClick"]
+[connection signal="button_down" from="ButtonQuit" to="." method="OnButtonQuitClick"]

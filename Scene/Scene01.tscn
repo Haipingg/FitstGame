@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ds2jfdl6n3f0"]
+
+[node name="Node2D" type="Node2D" unique_id=723654735]
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=1415738834]
+offset_right = 52.0
+offset_bottom = 48.0
+
+[node name="HTTPRequest" type="HTTPRequest" parent="TextureButton" unique_id=1759239088]
+
+[node name="Control" type="Control" parent="." unique_id=1497345633]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 300.0
+offset_top = 176.0
+offset_right = 340.0
+offset_bottom = 227.0
