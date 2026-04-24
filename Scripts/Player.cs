@@ -3,8 +3,8 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
-	public const float Speed = 300.0f;
-	public const float JumpVelocity = -600.0f;
+	public const float Speed = 150.0f;
+	public const float JumpVelocity = -450.0f;
 	public const float JumpGravityMultiplier = 1.2f; // 跳跃时的重力倍数
 	public const float FallGravityMultiplier = 1.5f; // 坠落时的重力倍数
 
