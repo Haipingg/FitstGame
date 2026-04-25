@@ -7,7 +7,7 @@ public partial class LabelHp : Label
 	private GameData data;
 	public override void _Ready()
 	{
-		data = GetNode<GameData>("/root/GameData");
+		data = GetNode<GameData>("../../GameData");
 		
 	}
 

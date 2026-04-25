@@ -14,6 +14,7 @@ public partial class Player : CharacterBody2D
 
 	public int MaxAirJumps = 1;
 	private int AirJumpUsed;
+	private bool wasOnFloor = false;
 
 	private enum AttackState { Idle, Attack1, Attack2, Attack3, Recovery }
 	private AttackState attackState = AttackState.Idle;
@@ -55,6 +56,19 @@ public partial class Player : CharacterBody2D
 
 		Vector2 velocity = Velocity;
 
+		// 检测是否刚刚离开地面
+		if (IsOnFloor())
+		{
+			AirJumpUsed = 0;
+			wasOnFloor = true;
+		}
+		else if (wasOnFloor)
+		{
+			// 刚刚离开地面，重置空中跳跃次数
+			AirJumpUsed = 0;
+			wasOnFloor = false;
+		}
+
 		if (!IsOnFloor())
 		{
 			// 跳跃分为三个部分，使用不同的重力倍数
@@ -89,7 +103,7 @@ public partial class Player : CharacterBody2D
 			}
 		}
 
-		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
 		if (direction != Vector2.Zero)
 		{
 			velocity.X = direction.X * Speed;

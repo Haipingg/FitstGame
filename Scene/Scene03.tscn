@@ -266,7 +266,6 @@ text = "3号场景"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1224900772]
 position = Vector2(574, 418)
-texture = ExtResource("1_0bpji")
 hframes = 9
 frame = 8
 script = ExtResource("2_nit0n")
@@ -274,9 +273,8 @@ script = ExtResource("2_nit0n")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1533205383]
 position = Vector2(815, 222)
 sprite_frames = SubResource("SpriteFrames_bf0lj")
-animation = &"new_animation_1"
+animation = &"new_animation_2"
 autoplay = "new_animation_1"
-frame_progress = 0.597173
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2031896419]
 libraries/ = SubResource("AnimationLibrary_5o0jl")

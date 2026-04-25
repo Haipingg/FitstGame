@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://xbv511f87f81" path="res://Sheet/1 (293)/13.png" id="4_hopp8"]
 [ext_resource type="Script" uid="uid://cp670ldoddf0f" path="res://Scripts/CameraController.cs" id="4_y9c6j"]
 [ext_resource type="Texture2D" uid="uid://uuhp1wfc0pnc" path="res://Sheet/1 (293)/14.png" id="5_6ieg6"]
+[ext_resource type="Script" uid="uid://b53vvtaq8lurk" path="res://Scripts/LabelHp.cs" id="6_12345"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_oupfc"]
 radius = 16.0
@@ -246,6 +247,10 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="LabelSettings" id="LabelSettings_12345"]
+font_size = 24
+font_color = Color(1, 0, 0, 1)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
 size = Vector2(75, 47)
 
@@ -272,9 +277,18 @@ autoplay = "Idle"
 ignore_rotation = false
 limit_left = 0
 limit_top = 0
-limit_right = 4500
-limit_bottom = 750
+limit_right = 4650
+limit_bottom = 898
 script = ExtResource("4_y9c6j")
+
+[node name="Label" type="Label" parent="." unique_id=987654321]
+offset_left = -35.0
+offset_top = -75.0
+offset_right = 32.0
+offset_bottom = -41.0
+text = "HP:10"
+label_settings = SubResource("LabelSettings_12345")
+script = ExtResource("6_12345")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1]
 script = ExtResource("2_5a1d6")

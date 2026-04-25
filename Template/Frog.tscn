@@ -197,29 +197,34 @@ radius = 59.135437
 script = ExtResource("1_5w7nu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=662657571]
+scale = Vector2(0.7, 0.7)
 shape = SubResource("CapsuleShape2D_n5lgp")
 
 [node name="Area2DPlayer" type="Area2D" parent="." unique_id=1908005222]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2DPlayer" unique_id=1816092704]
 texture_filter = 1
+scale = Vector2(0.7, 0.7)
 shape = SubResource("CircleShape2D_5w7nu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=940901331]
+scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_0sup0")
-animation = &"Jump"
+animation = &"Idle"
 autoplay = "Idle"
 
 [node name="Area2DDeath" type="Area2D" parent="." unique_id=2145557474]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2DDeath" unique_id=1555630737]
 position = Vector2(-6, 2)
+scale = Vector2(0.7, 0.7)
 shape = SubResource("CircleShape2D_waco8")
 
 [node name="Area2DAttack" type="Area2D" parent="." unique_id=2031512863]
 
 [node name="Attack" type="CollisionShape2D" parent="Area2DAttack" unique_id=1248389423]
 position = Vector2(0, 7)
+scale = Vector2(0.7, 0.7)
 shape = SubResource("CircleShape2D_30thk")
 
 [connection signal="body_entered" from="Area2DPlayer" to="." method="OnPlayerBodyEnter"]

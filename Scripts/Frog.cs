@@ -14,10 +14,14 @@ public partial class Frog : CharacterBody2D
 	private bool IsDie = false;
 	private GameData gameData;
 	private AnimatedSprite2D animSpriteForg;
+	private float moveDirection = 1; // 1 for right, -1 for left
+	private float moveTimer = 0;
+	private float moveDuration = 2; // 移动2秒后转向
+
     public override void _Ready()
     {
         animSpriteForg = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		gameData = GetNode<GameData>("/root/GameData");
+		gameData = GetNode<GameData>("../../GameData");
 		// 添加AreaEntered信号处理
 		Area2D area2DAttack = GetNode<Area2D>("Area2DAttack");
 		Area2D area2DDeath = GetNode<Area2D>("Area2DDeath");
@@ -55,8 +59,17 @@ public partial class Frog : CharacterBody2D
 	}
 	else
 	{
-		animSpriteForg.Play("Idle");
-		velocity.X = 0;
+		// 默认移动行为：来回移动
+		moveTimer += (float)delta;
+		if (moveTimer >= moveDuration)
+		{
+			moveDirection *= -1;
+			moveTimer = 0;
+		}
+		
+		velocity.X = Speed * moveDirection;
+		animSpriteForg.FlipH = moveDirection > 0;
+		animSpriteForg.Play("Jump");
 	}
 
 
@@ -77,6 +90,7 @@ public partial class Frog : CharacterBody2D
 		if(body.Name == "Player")
 		{
 			IsChasing = false;
+			player = null;
 		}
 	}
 
@@ -87,7 +101,7 @@ public partial class Frog : CharacterBody2D
 			player = body as Player;
 			if (gameData != null)
 			{
-				gameData.HP -= 3;
+				gameData.HP -= 1;
 				GD.Print(gameData.HP);
 			}
 		}
