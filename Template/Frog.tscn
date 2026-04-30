@@ -194,6 +194,8 @@ radius = 51.351727
 radius = 59.135437
 
 [node name="Frog" type="CharacterBody2D" unique_id=1633024882]
+collision_layer = 2
+collision_mask = 4
 script = ExtResource("1_5w7nu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=662657571]

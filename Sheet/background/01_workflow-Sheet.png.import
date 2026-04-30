@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://din5iup875kow"
-path="res://.godot/imported/03.png-f3ed14b34ae869398eff188b53ad507a.ctex"
+uid="uid://bgiphh20yjh21"
+path="res://.godot/imported/01_workflow-Sheet.png-24a2b5fcc4e283757999351f9f99835d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sheet/1 (293)/03.png"
-dest_files=["res://.godot/imported/03.png-f3ed14b34ae869398eff188b53ad507a.ctex"]
+source_file="res://Sheet/background/01_workflow-Sheet.png"
+dest_files=["res://.godot/imported/01_workflow-Sheet.png-24a2b5fcc4e283757999351f9f99835d.ctex"]
 
 [params]
 

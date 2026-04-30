@@ -5,16 +5,32 @@ public partial class Player : CharacterBody2D
 {
 	public const float Speed = 150.0f;
 	public const float JumpVelocity = -450.0f;
-	public const float JumpGravityMultiplier = 1.2f; // 跳跃时的重力倍数
-	public const float FallGravityMultiplier = 1.5f; // 坠落时的重力倍数
+	public const float JumpGravityMultiplier = 1.2f;
+	public const float FallGravityMultiplier = 1.5f;
+	public const float WallSlideSpeed = 100.0f;
+	public const float WallJumpVelocityX = 200.0f;
+	public const float WallJumpVelocityY = -350.0f;
+	public const float DashSpeed = 500.0f;
+	public const float DashDuration = 0.3f;
+	public const float DashCooldown = 0.5f;
+	public const int MaxAirDashes = 1;
+
+	[Export]
+	public uint DashCollisionMask = 1;
 
 	private AnimatedSprite2D animSprite;
+	private Hurtbox hurtbox;
 	private Hitbox hitbox;
 	private Hitbox leftHitbox;
+	private RayCast2D floorRay;
+	private RayCast2D wallLeft;
+	private RayCast2D wallRight;
 
 	public int MaxAirJumps = 1;
 	private int AirJumpUsed;
 	private bool wasOnFloor = false;
+	private bool isWallSliding = false;
+	private bool wallJumpUsed = false;
 
 	private enum AttackState { Idle, Attack1, Attack2, Attack3, Recovery }
 	private AttackState attackState = AttackState.Idle;
@@ -32,11 +48,22 @@ public partial class Player : CharacterBody2D
 	private float cancelWindowStart = 0.1f;
 	private float cancelWindowEnd = 0.3f;
 
+	private bool isDashing = false;
+	private float dashTimer = 0f;
+	private int airDashUsed = 0;
+	private float dashCooldownTimer = 0f;
+	private bool isDashOnCooldown = false;
+	private uint originalCollisionMask = 0;
+
     public override void _Ready()
     {
         animSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		hurtbox = GetNode<Hurtbox>("Hurtbox");
 		hitbox = GetNode<Hitbox>("Hitbox");
 		leftHitbox = GetNode<Hitbox>("LeftHitbox");
+		floorRay = GetNode<RayCast2D>("FloorRay");
+		wallLeft = GetNode<RayCast2D>("WallLeft");
+		wallRight = GetNode<RayCast2D>("WallRight");
 		hitbox.Disable();
 		leftHitbox.Disable();
         animSprite.AnimationFinished += OnAnimationFinished;
@@ -48,37 +75,67 @@ public partial class Player : CharacterBody2D
 
 		UpdateAttackBuffer(deltaFloat);
 		UpdateRecovery(deltaFloat);
+		UpdateDash(deltaFloat);
 
 		if (attackState != AttackState.Idle && canCancel && attackBuffered)
 		{
 			TryComboAttack();
 		}
 
+		if (isDashing)
+		{
+			HandleDashMovement();
+			return;
+		}
+
 		Vector2 velocity = Velocity;
 
-		// 检测是否刚刚离开地面
 		if (IsOnFloor())
 		{
 			AirJumpUsed = 0;
+			airDashUsed = 0;
 			wasOnFloor = true;
+			isWallSliding = false;
+			wallJumpUsed = false;
 		}
 		else if (wasOnFloor)
 		{
-			// 刚刚离开地面，重置空中跳跃次数
 			AirJumpUsed = 0;
 			wasOnFloor = false;
 		}
 
+		bool isTouchingLeftWall = wallLeft.IsColliding();
+		bool isTouchingRightWall = wallRight.IsColliding();
+
 		if (!IsOnFloor())
 		{
-			// 跳跃分为三个部分，使用不同的重力倍数
-			if (velocity.Y < 0) // 向上跃的部分
+			if ((isTouchingLeftWall && velocity.X <= 0) || (isTouchingRightWall && velocity.X >= 0))
 			{
-				velocity += GetGravity() * JumpGravityMultiplier * deltaFloat;
+				isWallSliding = true;
+				if (velocity.Y > WallSlideSpeed)
+				{
+					velocity.Y = WallSlideSpeed;
+				}
 			}
-			else // 到达最高点开始坠落和向下坠落的部分
+			else
 			{
-				velocity += GetGravity() * FallGravityMultiplier * deltaFloat;
+				isWallSliding = false;
+			}
+
+			if (!isWallSliding)
+			{
+				if (velocity.Y < 0)
+				{
+					velocity += GetGravity() * JumpGravityMultiplier * deltaFloat;
+				}
+				else
+				{
+					velocity += GetGravity() * FallGravityMultiplier * deltaFloat;
+				}
+			}
+			else
+			{
+				velocity += GetGravity() * deltaFloat;
 			}
 		}
 
@@ -89,12 +146,34 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
+		if (Input.IsActionJustPressed("Dash") && CanDash())
+		{
+			StartDash();
+			return;
+		}
+
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
 			if (IsOnFloor())
 			{
 				AirJumpUsed = 0;
 				velocity.Y = JumpVelocity;
+				wallJumpUsed = false;
+			}
+			else if (isWallSliding && !wallJumpUsed)
+			{
+				velocity.Y = WallJumpVelocityY;
+				if (wallLeft.IsColliding())
+				{
+					velocity.X = WallJumpVelocityX;
+				}
+				else
+				{
+					velocity.X = -WallJumpVelocityX;
+				}
+				wallJumpUsed = true;
+				isWallSliding = false;
+				AirJumpUsed = 0;
 			}
 			else if (AirJumpUsed < MaxAirJumps)
 			{
@@ -155,15 +234,24 @@ public partial class Player : CharacterBody2D
 		// 跳跃动画分为三个部分
 		if (!IsOnFloor())
 		{
-			if (Velocity.Y < -10) // 向上跃的部分
+			if (Velocity.X < 0)
+			{
+				animSprite.FlipH = true;
+			}
+			else if (Velocity.X > 0)
+			{
+				animSprite.FlipH = false;
+			}
+
+			if (Velocity.Y < -10)
 			{
 				animSprite.Play("JumpUp");
 			}
-			else if (Velocity.Y > 10) // 向下坠落的部分
+			else if (Velocity.Y > 10)
 			{
 				animSprite.Play("JumpDown");
 			}
-			else // 到达最高点开始坠落的部分
+			else
 			{
 				animSprite.Play("JumpPeak");
 			}
@@ -287,12 +375,79 @@ public partial class Player : CharacterBody2D
 
 	public void TakeDamage(int damage)
 	{
+		if (isDashing)
+			return;
 		GD.Print($"Player受到{damage}点伤害");
-		// 触发震屏效果
 		Camera2D camera = GetNode<Camera2D>("Camera2D");
 		if (camera is CameraController cameraController)
 		{
 			cameraController.ShakeCamera();
 		}
+	}
+
+	private void StartDash()
+	{
+		isDashing = true;
+		dashTimer = DashDuration;
+		hurtbox.Monitoring = false;
+		hurtbox.Visible = false;
+		animSprite.Play("Dash");
+		if (!IsOnFloor())
+		{
+			airDashUsed++;
+		}
+		isDashOnCooldown = true;
+		dashCooldownTimer = DashCooldown;
+		originalCollisionMask = CollisionMask;
+		CollisionMask = DashCollisionMask;
+	}
+
+	private void UpdateDash(float delta)
+	{
+		if (isDashing)
+		{
+			dashTimer -= delta;
+			if (dashTimer <= 0)
+			{
+				EndDash();
+			}
+		}
+		if (isDashOnCooldown)
+		{
+			dashCooldownTimer -= delta;
+			if (dashCooldownTimer <= 0)
+			{
+				isDashOnCooldown = false;
+				dashCooldownTimer = 0;
+			}
+		}
+	}
+
+	private void HandleDashMovement()
+	{
+		float dashDirection = animSprite.FlipH ? -1 : 1;
+		Velocity = new Vector2(dashDirection * DashSpeed, 0);
+		MoveAndSlide();
+	}
+
+	private void EndDash()
+	{
+		isDashing = false;
+		dashTimer = 0;
+		hurtbox.Monitoring = true;
+		hurtbox.Visible = true;
+		Velocity = Vector2.Zero;
+		CollisionMask = originalCollisionMask;
+	}
+
+	private bool CanDash()
+	{
+		if (isDashing)
+			return false;
+		if (isDashOnCooldown)
+			return false;
+		if (!IsOnFloor() && airDashUsed >= MaxAirDashes)
+			return false;
+		return true;
 	}
 }
