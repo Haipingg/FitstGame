@@ -25,6 +25,7 @@ public partial class Player : CharacterBody2D
 	private RayCast2D floorRay;
 	private RayCast2D wallLeft;
 	private RayCast2D wallRight;
+	private Node2D landParticles;
 
 	public int MaxAirJumps = 1;
 	private int AirJumpUsed;
@@ -64,6 +65,7 @@ public partial class Player : CharacterBody2D
 		floorRay = GetNode<RayCast2D>("FloorRay");
 		wallLeft = GetNode<RayCast2D>("WallLeft");
 		wallRight = GetNode<RayCast2D>("WallRight");
+		landParticles = GetNode<Node2D>("LandParticles");
 		hitbox.Disable();
 		leftHitbox.Disable();
         animSprite.AnimationFinished += OnAnimationFinished;
@@ -92,6 +94,10 @@ public partial class Player : CharacterBody2D
 
 		if (IsOnFloor())
 		{
+			if (!wasOnFloor)
+			{
+				EmitLandParticles();
+			}
 			AirJumpUsed = 0;
 			airDashUsed = 0;
 			wasOnFloor = true;
@@ -100,6 +106,7 @@ public partial class Player : CharacterBody2D
 		}
 		else if (wasOnFloor)
 		{
+			StopLandParticles();
 			AirJumpUsed = 0;
 			wasOnFloor = false;
 		}
@@ -438,6 +445,17 @@ public partial class Player : CharacterBody2D
 		hurtbox.Visible = true;
 		Velocity = Vector2.Zero;
 		CollisionMask = originalCollisionMask;
+	}
+
+	private void EmitLandParticles()
+	{
+		landParticles.Call("set_emitting", true);
+		landParticles.Call("restart");
+	}
+
+	private void StopLandParticles()
+	{
+		landParticles.Call("set_emitting", false);
 	}
 
 	private bool CanDash()

@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dem0cxj8cey70" path="res://Sheet/1 (68)/07.png" id="9_vmv1g"]
 [ext_resource type="Texture2D" uid="uid://dile3uwi7bhn5" path="res://Sheet/1 (68)/08.png" id="10_mt4og"]
 [ext_resource type="Texture2D" uid="uid://c5lljmk8v15dy" path="res://Sheet/1 (68)/09.png" id="11_fa13h"]
-[ext_resource type="AudioStream" uid="uid://c7qjpsf13v4o0" path="res://Music/山海.mp3" id="12_3dwet"]
+[ext_resource type="AudioStream" uid="uid://blhlpqty53o6u" path="res://Music/Ludum Dare 30 06.ogg" id="12_vmv1g"]
 [ext_resource type="Script" uid="uid://dw8xclygmdcnv" path="res://Scripts/Area2dLearn.cs" id="13_5o0jl"]
 [ext_resource type="Texture2D" uid="uid://dgteqo1elaha2" path="res://Sheet/1 (88)/06.png" id="14_3hqwv"]
 [ext_resource type="Texture2D" uid="uid://bwtymcbjnddek" path="res://Sheet/1 (88)/07.png" id="15_vmv1g"]
@@ -281,7 +281,7 @@ libraries/ = SubResource("AnimationLibrary_5o0jl")
 autoplay = &"new_animation"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1011150729]
-stream = ExtResource("12_3dwet")
+stream = ExtResource("12_vmv1g")
 autoplay = true
 
 [node name="Area2D" type="Area2D" parent="." unique_id=2013729178]
